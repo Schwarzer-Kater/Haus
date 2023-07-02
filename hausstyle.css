@@ -1,0 +1,29 @@
+#messages {
+	background-color: yellow;
+	font-size: 3;
+	font-weight: bold;
+	line-height: 140%;
+}
+
+#status {
+	background-color: red;
+	font-size: 4;
+	font-weight: bold;
+	color: white;
+	line-height: 140%;
+}
+
+table, th, td {
+	border: 2px solid black;
+	border-collapse: collapse;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.nobreak {
+	white-space: nowrap;
+}
+	
+.notConnected {
+  color: red; 
+}
