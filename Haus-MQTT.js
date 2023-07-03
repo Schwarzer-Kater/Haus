@@ -1,18 +1,38 @@
-var connected_flag = 0
+// Information zu MQTT und Javascript gibt es dort:
+// https://github.com/eclipse/paho.mqtt.javascript
+
+var mqttConnected = 0
 var mqtt;
-var reconnectTimeout = 2000;
-var host = "192.168.178.26";
-var port = 8083;
+const reconnectTimeout = 2000;
+const host = "192.168.178.26";
+const port = 8083;
 
 var connectAussen = 0;
 var connectInnen = 0;
 var connectGateway = 0;
 var connectGarage = 0;
 
+// Logik für die HTML-Seite -------------------------------------------
+
+// Richtet die Events ein
+function connectEvents(){
+    document.getElementById('Garage-Tor').addEventListener('click', garageTorTaster);
+    ["1", "2", "3", "4"].forEach(function(val, i, arr){
+	document.getElementById("DauerKreis" + val + "Input").value = "0";
+	// document.getElementById("DauerKreis" + val + "Output").value = "0";
+	// document.getElementById("DauerKreis" + val + "Input").addEventListener('input', function(event) {
+	// document.getElementById("DauerKreis" + val + "Output").value = event.target.value;
+	// });
+    });
+    document.getElementById("Bewaesserung-Start").addEventListener('click', bewaesserungStart);
+}
+
+// Wertet die connect*-Variablen aus und schreibt das Ergebnis in die
+// entsprechenden Felder
 function updateStatus() {
-    var upd = function(label, val) { 
-	var el = document.getElementById(label);
-	console.log("upd: (" + label + "):" + el);
+    let upd = function(label, val) { 
+	let el = document.getElementById(label);
+	// console.log("upd: (" + label + "):" + el);
 	if (val === 0) {
 	    el.innerHTML = "nicht verbunden";
 	    el.classList.add("notConnected");
@@ -21,37 +41,86 @@ function updateStatus() {
 	    el.classList.remove("notConnected");
 	};	
     };
-    console.log("upd: " + connectAussen + ", " + connectInnen + ", " + connectGateway + ", " + connectGarage);
-    upd("status-innen", connectInnen);
-    upd("status-Gateway", connectGateway);
-    upd("status-Garage", connectGarage);
+    // console.log("upd: " + connectAussen + ", " + connectInnen + ", " + connectGateway + ", " + connectGarage);
     upd("status-aussen", connectAussen);
+    upd("status-innen", connectInnen);
+    // Too much traffic for Gateway
+    // upd("status-Gateway", connectGateway);
+    upd("status-Garage", connectGarage);
     connectAussen = connectInnen = connectGateway = connectGarage = 0;
-    console.log("upd beendet");
+    // console.log("upd beendet");
     window.setTimeout(updateStatus, 6000);
 }
 
+// gibt true zurück, wenn die übergebene Zeit von heute ist
+function isToday(xtime) {
+    let jetzt = new Date();
+    return (xtime.getDate() === jetzt.getDate()) &&
+	(xtime.getMonth() === jetzt.getMonth());
+}
+
+// gibt true zurück, wenn die übergebene Zeit von gestern ist
+function isYesterday(xtime) {
+    let gestern = new Date();
+    gestern.setDate(gestern.getDate() - 1);
+    return (xtime.getDate() === gestern.getDate()) &&
+	(xtime.getMonth() === gestern.getMonth());
+}
+
+// Wird aufgerufen, wenn der Button Garage-Tor-Taster betätigt wird
+function garageTorTaster(){
+    console.log("Garage-Tor-Taster");
+    if (mqttConnected === 0) {
+	alert("Keine Verbindung zu MQTT!\nBefehl kann nicht gesendet werden.");
+    } else {
+	let message = new Paho.MQTT.Message("400");
+	message.destinationName = "/Garage/out/XTor";
+	mqtt.send(message);
+    };
+}
+
+// Wird aufgerufen, wenn der Button Bewässerung starten betätigt wird
+function bewaesserungStart(){
+    console.log("Bewässerung starten");
+    if (mqttConnected === 0) {
+	alert("Keine Verbindung zu MQTT!\nBefehl kann nicht gesendet werden.");
+    } else {
+	let txt;
+	txt = document.getElementById("DauerKreis1Input").value + "/";
+	txt = txt + document.getElementById("DauerKreis2Input").value + "/";
+	txt = txt + document.getElementById("DauerKreis3Input").value + "/";
+	txt = txt + document.getElementById("DauerKreis4Input").value;
+	let message = new Paho.MQTT.Message(txt);
+	message.destinationName = "/Garage/out/XBW";
+	mqtt.send(message);
+    };
+}
+
+// MQTT-Anbindung -----------------------------------------------
+
+// Wird aufgerufen, wenn die MQTT-Verbindung verloren geht
 function onConnectionLost() {
     console.log("connection lost");
-    document.getElementById("status").innerHTML = "Connection Lost";
-    document.getElementById("messages").innerHTML = "Connection Lost";
     document.getElementById("status-mqtt").innerHTML = "Verbindung verloren";
-    connected_flag = 0;
+    mqttConnected = 0;
 }
+
+// Wird aufgerufen, wenn der MQTT-Verbindungsaufbau gescheitert ist
 function onFailure(message) {
     console.log("Failed");
-    document.getElementById("messages").innerHTML = "Connection Failed - Retrying";
     document.getElementById("status-mqtt").innerHTML = "Verbindungsfehler";
     setTimeout(MQTTconnect, reconnectTimeout);
 }
-function onMessageArrived(r_message) {
-    out_msg = "Message received " + r_message.payloadString + "<br>";
-    out_msg = out_msg + "Message received Topic "
-	+ r_message.destinationName;
-    // console.log("Message received ",r_message.payloadString);
+
+// Wird aufgerufen, wenn eine MQTT-Nachricht eingetroffen ist
+function onMessageArrived(message) {
+    // out_msg = "Message received " + message.payloadString + "<br>";
+    // out_msg = out_msg + "Message received Topic "
+    //	+ message.destinationName;
+    // console.log("Message received ",message.payloadString);
     // console.log(out_msg);
-    document.getElementById("messages").innerHTML = out_msg;
-    var topic = r_message.destinationName.replaceAll("/", ":");
+    // document.getElementById("messages").innerHTML = out_msg;
+    let topic = message.destinationName.replaceAll("/", ":");
     if (topic.includes(":aussen:")) {
 	connectAussen = 1;
     } else if (topic.includes(":innen:")) {
@@ -62,20 +131,17 @@ function onMessageArrived(r_message) {
 	connectGarage = 1;
     };
     // console.log(topic);
-    var el = document.getElementById(topic);
+    let el = document.getElementById(topic);
     if (el) {
 	// Dimension ergänzen
-	var txt = r_message.payloadString;
+	let txt = message.payloadString;
 	if (topic.includes("Unixzeit")){
-	    var zeit = new Date();
-	    var jetzt = new Date();
-	    var gestern = new Date();
-	    gestern.setDate(gestern.getDate() - 1);
+	    let zeit = new Date();
 	    zeit.setTime(txt + "000");
 	    txt = zeit.toLocaleTimeString();
-	    if ((zeit.getDate() === jetzt.getDate()) && (zeit.getMonth() === jetzt.getMonth())) {
+	    if (isToday(zeit)) {
 		txt += ", heute";
-	    } else if ((zeit.getDate() === gestern.getDate()) && (zeit.getMonth() === gestern.getMonth())) {
+	    } else if (isYesterday(zeit)) {
 		txt += ", gestern";
 	    } else {
 		txt += " am " + zeit.toLocaleDateString();
@@ -94,32 +160,39 @@ function onMessageArrived(r_message) {
 	el.innerHTML = txt;
     } else {
 	if (topic.includes("bwrest")) {
-	    var txt = r_message.payloadString;
+	    var txt = message.payloadString;
 	    var status = "aktiv, noch "
 	    txt.split("/").forEach(function(val, i, arr){
 		var el = document.getElementById("Kreis" + i);
 		el.innerHTML = (val === "0" ? "aus" : status + val + " Minuten");
-		if (val !== "0") {status = "wartet, insgesamt ";};
+		if (val !== "0") {status = "wartet, geplant ";};
 	    });
 	};
     };
-    
+    document.getElementById("stand").innerHTML = new Date();
+   // console.log("Message finished ",message.destinationName);
 }
+
+// Wird aufgerufen, wenn eine MQTT-Verbindung aufgebaut wurde,
+// ggf. auch nach einem Wiederaufbau
 function onConnected(recon, url) {
-    console.log(" in onConnected " + reconn);
+    console.log(" in onConnected " + recon);
 }
-function onConnect() {
+
+// Wird aufgerufen, wenn der MQTT-Verbindungsaufbau erfolgreich war
+// Meldet sich an für die Topics
+function onSuccess() {
     // Once a connection has been made, make a subscription and send a message.
-    document.getElementById("messages").innerHTML = "Connected to " + host
-	+ "on port " + port;
-    connected_flag = 1
-    document.getElementById("status").innerHTML = "Connected";
-    console.log("on Connect " + connected_flag);
+    // document.getElementById("messages").innerHTML = "Connected to " + host + "on port " + port;
+    mqttConnected = 1
+    // document.getElementById("status").innerHTML = "Connected";
+    console.log("on Connect " + mqttConnected);
     mqtt.subscribe("/ArbeitszimmerK/#");
     mqtt.subscribe("/Garage/#");
     document.getElementById("status-mqtt").innerHTML = "Verbindung aktiv";
 }
 
+// Baut am Anfang die MQTT-Verbindung auf
 function MQTTconnect() {
 
     console.log("connecting to " + host + " " + port);
@@ -129,36 +202,21 @@ function MQTTconnect() {
     console.log("connecting " + cname + " to "+ host);
     var options = {
 	timeout : 3,
-	onSuccess : onConnect,
+	onSuccess : onSuccess,
 	onFailure : onFailure,
 
     };
-
     mqtt.onConnectionLost = onConnectionLost;
     mqtt.onMessageArrived = onMessageArrived;
-    //mqtt.onConnected = onConnected;
-
+    mqtt.onConnected = onConnected;
     mqtt.connect(options);
     return false;
-
 }
 
-function sub_topics() {
-    document.getElementById("messages").innerHTML = "";
-    if (connected_flag == 0) {
-	out_msg = "<b>Not Connected so can't subscribe</b>"
-	console.log(out_msg);
-	document.getElementById("messages").innerHTML = out_msg;
-	return false;
-    }
-    var stopic = document.forms["subs"]["Stopic"].value;
-    console.log("Subscribing to topic =" + stopic);
-    mqtt.subscribe(stopic);
-    return false;
-}
-
+// Sende Nachricht
+// TODO muss noch überarbeitet werden!!
 function send_message(msg, topic) {
-    if (connected_flag == 0) {
+    if (mqttConnected == 0) {
 	out_msg = "<b>Not Connected so can't send</b>"
 	console.log(out_msg);
 	document.getElementById("messages").innerHTML = out_msg;
