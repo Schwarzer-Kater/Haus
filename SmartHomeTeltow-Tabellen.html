@@ -2,7 +2,7 @@
 
 
 <html lang="de">
-  <link rel="stylesheet" href="hausstyle.css">
+  <link rel="stylesheet" href="SHT.css">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +14,10 @@
 	 src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
       -->
     <script type="text/javascript"
-	    src="Haus-MQTT.js"></script>
+	    src="SmartHomeTeltow-Tabellen.js"></script>
   </head>
   <body onload="MQTTconnect(); window.setTimeout(updateStatus, 2000); connectEvents();");>
+
     <h2>Messwerte</h2>
     <table>
       <tr> <th></th> 
@@ -32,79 +33,105 @@
 	<td id=":ArbeitszimmerK:aussen:LichtwertInfo:Ausgelesen"></td>
       </tr>
       <tr><th>außen&nbsp;max </th>
-	<td> <span class="nobreak">
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:TemperaturInfo:Maximum"> </span> um 
-	    <span id=":ArbeitszimmerK:aussen:TemperaturInfo:MaximumUnixzeit">
-	</span></span></td>
-	<td><span class="nobreak">
+	    <span id=":ArbeitszimmerK:aussen:TemperaturInfo:MaximumUnixzeit"></span>
+	  </span>
+	</td>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:LuftfeuchteInfo:Maximum"></span> um 
 	    <span id=":ArbeitszimmerK:aussen:LuftfeuchteInfo:MaximumUnixzeit"></span>
-	</span>  </td>
+	  </span>
+	</td>
 	<td> <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:LuftdruckInfo:Maximum"></span> um
 	    <span id=":ArbeitszimmerK:aussen:LuftdruckInfo:MaximumUnixzeit"></span>
 	</span></td>
-	<td> <span class="nobreak">
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:LichtwertInfo:Maximum"></span> um 
 	    <span id=":ArbeitszimmerK:aussen:LichtwertInfo:MaximumUnixzeit"></span>
-	</span></td>
+	  </span>
+	</td>
       </tr>
       <tr><th>außen&nbsp;min </th>
-	<td> <span class="nobreak">
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:TemperaturInfo:Minimum"> </span> um 
-	    <span id=":ArbeitszimmerK:aussen:TemperaturInfo:MinimumUnixzeit">
-	</span></span></td>
-	<td><span class="nobreak">
+	    <span id=":ArbeitszimmerK:aussen:TemperaturInfo:MinimumUnixzeit"></span>
+	  </span>
+	</td>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:LuftfeuchteInfo:Minimum"></span> um 
 	    <span id=":ArbeitszimmerK:aussen:LuftfeuchteInfo:MinimumUnixzeit"></span>
-	</span>  </td>
-	<td> <span class="nobreak">
+	  </span>
+	</td>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:LuftdruckInfo:Minimum"></span> um
 	    <span id=":ArbeitszimmerK:aussen:LuftdruckInfo:MinimumUnixzeit"></span>
-	</span></td>
-	<td> <span class="nobreak">
+	  </span>
+	</td>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:aussen:LichtwertInfo:Minimum"></span> um 
 	    <span id=":ArbeitszimmerK:aussen:LichtwertInfo:MinimumUnixzeit"></span>
-	</span></td>
+	  </span>
+	</td>
       </tr>
-      <tr><th>innen</th>
+      <tr>
+	<th>innen</th>
 	<td id=":ArbeitszimmerK:innen:Temperatur2Info:Ausgelesen"></td>
 	<td id=":ArbeitszimmerK:innen:Luftfeuchte2Info:Ausgelesen"></td>
 	<td id=":ArbeitszimmerK:innen:LuftdruckInfo:Ausgelesen"></td>
 	<td id=":ArbeitszimmerK:innen:LichtwertInfo:Ausgelesen"></td>
       </tr>
-      <tr><th>innen&nbsp;max </th>
-	<td> <span class="nobreak">
+      <tr>
+	<th>innen&nbsp;max </th>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:innen:Temperatur2Info:Maximum"> </span> um 
-	    <span id=":ArbeitszimmerK:innen:Temperatur2Info:MaximumUnixzeit">
-	</span></span></td>
-	<td><span class="nobreak">
+	    <span id=":ArbeitszimmerK:innen:Temperatur2Info:MaximumUnixzeit"></span>
+	  </span>
+	</td>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:innen:Luftfeuchte2Info:Maximum"></span> um 
 	    <span id=":ArbeitszimmerK:innen:Luftfeuchte2Info:MaximumUnixzeit"></span>
-	</span>  </td>
+	  </span>
+	</td>
 	<td> </td>
 	<td> </td>
       </tr>
-      <tr><th>innen&nbsp;min </th>
-	<td> <span class="nobreak">
+      <tr>
+	<th>innen&nbsp;min </th>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:innen:Temperatur2Info:Minimum"> </span> um 
-	    <span id=":ArbeitszimmerK:innen:Temperatur2Info:MinimumUnixzeit">
-	</span></span></td>
-	<td><span class="nobreak">
+	    <span id=":ArbeitszimmerK:innen:Temperatur2Info:MinimumUnixzeit"></span>
+	  </span>
+	</td>
+	<td>
+	  <span class="nobreak">
 	    <span id=":ArbeitszimmerK:innen:Luftfeuchte2Info:Minimum"></span> um 
 	    <span id=":ArbeitszimmerK:innen:Luftfeuchte2Info:MinimumUnixzeit"></span>
-	</span>  </td>
+	  </span>
+	</td>
 	<td> </td>
 	<td> </td>
       </tr>
-      <tr><th>Garage</th>
+      <tr>
+	<th>Garage</th>
 	<td id=":Garage:in:temperatur"></td>
 	<td></td>
 	<td></td>
 	<td></td>
       </tr>
     </table>
-    <p></p>
+    
     <h2>Garage</h2>
     <table>
       <tr><th>Tor</th><td><span id =":Garage:in:magnet"></span></td></tr>
@@ -115,10 +142,22 @@
 
     <h2>Bewässerung</h2>
     <table>
-      <tr><th>Bewässerung Kreis 1</th><td><span id ="Kreis0">keine Information</span></td></tr>
-      <tr><th>Bewässerung Kreis 2</th><td><span id ="Kreis1">keine Information</span></td></tr>
-      <tr><th>Bewässerung Kreis 3</th><td><span id ="Kreis2">keine Information</span></td></tr>
-      <tr><th>Bewässerung Kreis 4</th><td><span id ="Kreis3">keine Information</span></td></tr>
+      <tr>
+	<th>Bewässerung Kreis 1</th>
+	<td><span id ="Kreis0">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Bewässerung Kreis 2</th>
+	<td><span id ="Kreis1">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Bewässerung Kreis 3</th>
+	<td><span id ="Kreis2">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Bewässerung Kreis 4</th>
+	<td><span id ="Kreis3">keine Information</span></td>
+      </tr>
     </table>
     <p></p>
     <form>
@@ -149,11 +188,26 @@
     
     <h2>Status</h2>
     <table>
-      <tr><th>MQTT</th><td><span id="status-mqtt">keine Information</span></td></tr>
-      <tr><th>Sensoren aussen</th><td><span id="status-aussen">keine Information</span></td></tr>
-      <tr><th>Sensoren innen</th><td><span id="status-innen">keine Information</span></td></tr>
-      <!-- <tr><th>Gateway WLAN/LoRa</th><td><span id="status-Gateway">keine Information</span></td></tr> -->
-      <tr><th>LoRa Garage</th><td><span id="status-Garage">keine Information</span></td></tr>
+      <tr>
+	<th>MQTT</th>
+	<td><span id="status-mqtt">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Sensoren aussen</th>
+	<td><span id="status-aussen">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Sensoren innen</th>
+	<td><span id="status-innen">keine Information</span></td>
+      </tr>
+      <!-- <tr> -->
+      <!-- 	<th>Gateway WLAN/LoRa</th> -->
+      <!-- 	<td><span id="status-Gateway">keine Information</span></td> -->
+      <!-- </tr> -->
+      <tr>
+	<th>LoRa Garage</th>
+	<td><span id="status-Garage">keine Information</span></td>
+      </tr>
     </table>
     <hr>
     <p>Stand: <span id="stand"><span></p>
@@ -163,7 +217,7 @@
 
 
     <hr>
-    Version 3.07.2023 - 21:00
+    Version 3.07.2023 - 21:30
 
     <!--
 	Messages:
