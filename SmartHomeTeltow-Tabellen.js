@@ -74,7 +74,7 @@ function garageTorTaster(){
 	alert("Keine Verbindung zu MQTT!\nBefehl kann nicht gesendet werden.");
     } else {
 	let message = new Paho.MQTT.Message("400");
-	message.destinationName = "/Garage/out/XTor";
+	message.destinationName = "/Garage/out/Tor";
 	mqtt.send(message);
     };
 }
@@ -91,7 +91,7 @@ function bewaesserungStart(){
 	txt = txt + document.getElementById("DauerKreis3Input").value + "/";
 	txt = txt + document.getElementById("DauerKreis4Input").value;
 	let message = new Paho.MQTT.Message(txt);
-	message.destinationName = "/Garage/out/XBW";
+	message.destinationName = "/Garage/out/BW";
 	mqtt.send(message);
     };
 }
@@ -160,10 +160,10 @@ function onMessageArrived(message) {
 	el.innerHTML = txt;
     } else {
 	if (topic.includes("bwrest")) {
-	    var txt = message.payloadString;
-	    var status = "aktiv, noch "
+	    let txt = message.payloadString;
+	    let status = "aktiv, noch "
 	    txt.split("/").forEach(function(val, i, arr){
-		var el = document.getElementById("Kreis" + i);
+		let el = document.getElementById("Kreis" + i);
 		el.innerHTML = (val === "0" ? "aus" : status + val + " Minuten");
 		if (val !== "0") {status = "wartet, geplant ";};
 	    });
@@ -196,11 +196,11 @@ function onSuccess() {
 function MQTTconnect() {
 
     console.log("connecting to " + host + " " + port);
-    var x = Math.floor(Math.random() * 10000);
-    var cname = "controlform-" + x;
+    let x = Math.floor(Math.random() * 10000);
+    let cname = "controlform-" + x;
     mqtt = new Paho.MQTT.Client(host, port, cname);
     console.log("connecting " + cname + " to "+ host);
-    var options = {
+    let options = {
 	timeout : 3,
 	onSuccess : onSuccess,
 	onFailure : onFailure,
@@ -210,24 +210,5 @@ function MQTTconnect() {
     mqtt.onMessageArrived = onMessageArrived;
     mqtt.onConnected = onConnected;
     mqtt.connect(options);
-    return false;
-}
-
-// Sende Nachricht
-// TODO muss noch überarbeitet werden!!
-function send_message(msg, topic) {
-    if (mqttConnected == 0) {
-	out_msg = "<b>Not Connected so can't send</b>"
-	console.log(out_msg);
-	document.getElementById("messages").innerHTML = out_msg;
-	return false;
-    }
-    var value = msg.value;
-    console.log("value= " + value);
-    console.log("topic= " + topic);
-    message = new Paho.MQTT.Message(value);
-    message.destinationName = "house/" + topic;
-
-    mqtt.send(message);
     return false;
 }

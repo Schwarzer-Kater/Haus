@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="de">
+  <link rel="stylesheet" href="SHT.css">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messwerte Smart Home</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"
+      type="text/javascript"></script>
+    <script src="gauge.min.js" type="text/javascript"></script>
+    <script src="SmartHomeTeltow-Instrumente.js" type="text/javascript">
+    </script>
+  </head>
+  <body onLoad="initAll();">
+    <canvas id="tempInnenGauge"></canvas>
+    <canvas id="tempAussenGauge"></canvas>
+  </body>
+</html>
+
