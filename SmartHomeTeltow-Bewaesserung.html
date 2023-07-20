@@ -1,0 +1,104 @@
+<!doctype html>
+
+
+<html lang="de">
+  <link rel="stylesheet" href="SHT.css">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewässerung Teltow im Eigenbau</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"
+      type="text/javascript"></script>
+    <!-- <script type="text/javascript"
+	 src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      -->
+    <script type="text/javascript"
+	    src="SmartHomeTeltow-Tabellen.js"></script>
+  </head>
+  <body onload="MQTTconnect(); window.setTimeout(updateStatus, 2000); connectEvents(false);");>
+
+
+    <h2>Bewässerung</h2>
+    <table>
+      <tr>
+	<th>Bewässerung Kreis 1</th>
+	<td>Große Rasenfläche vorne</td>
+	<td><span id ="Kreis0">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Bewässerung Kreis 2</th>
+	<td>Kleine Rasenflächen an den Seiten</td>
+	<td><span id ="Kreis1">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Bewässerung Kreis 3</th>
+	<td>Beet am Zaun, Kirschbaum, Himbeeren, Brombeeren</td>
+	<td><span id ="Kreis2">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>Bewässerung Kreis 4</th>
+	<td>Böschung, Kräuter</td>
+	<td><span id ="Kreis3">keine Information</span></td>
+      </tr>
+    </table>
+    <p></p>
+    <form>
+	  <button type="button" id="Bewaesserung-Kombination1">Bewässerung alles lang 15/15/60/60</button><br>
+	  <button type="button" id="Bewaesserung-Kombination2">Bewässerung alles kurz 8/8/30/30</button><br>
+	  <button type="button" id="Bewaesserung-Kombination3">Bewässerung nur Beete und Böschung 0/0/60/60</button><br>
+	  <button type="button" id="Bewaesserung-Kombination4">Bewässerung nur Böschung 0/0/0/60</button><br>
+	  <hr>
+      <label for="DauerKreis1">Kreis 1:
+	<input type="number" min="0" max="180"
+	       value="0" step="1" id="DauerKreis1Input" name="DauerKreis1Input">
+	<!-- <output id="DauerKreis1Output" for="DauerKreis1"></output> --> Minuten
+      </label><br/>
+      <label for="DauerKreis2">Kreis 2:
+	<input type="number" min="0" max="180"
+	       value="0" step="1" id="DauerKreis2Input" name="DauerKreis2Input">
+	<!-- <output id="DauerKreis2Output" for="DauerKreis2"></output> --> Minuten
+      </label><br/>
+      <label for="DauerKreis3">Kreis 3:
+	<input type="number" min="0" max="180"
+	       value="0" step="1" id="DauerKreis3Input" name="DauerKreis3Input">
+	<!-- <output id="DauerKreis3Output" for="DauerKreis3"></output> --> Minuten
+      </label><br/>
+      <label for="DauerKreis4">Kreis 4:
+	<input type="number" min="0" max="180"
+	       value="0" step="1" id="DauerKreis4Input" name="DauerKreis4Input">
+	<!-- <output id="DauerKreis4Output" for="DauerKreis4"></output> --> Minuten
+      </label><br/>
+      <p>
+	<button type="button" id="Bewaesserung-Start">Bewässerung starten</button>
+      </p>
+    </form>
+    
+    <h2>Status</h2>
+    <table>
+      <tr>
+	<th>MQTT</th>
+	<td><span id="status-mqtt">keine Information</span></td>
+      </tr>
+      <tr>
+	<th>LoRa Garage</th>
+	<td><span id="status-Garage">keine Information</span></td>
+      </tr>
+    </table>
+    <hr>
+    <p>Stand: <span id="stand"><span></p>
+    <!-- <div id="status">Connection Status: Not Connected
+	 </div>
+    -->
+
+
+    <hr>
+    Version 3.07.2023 - 21:30
+
+    <!--
+	Messages:
+	<p id="messages"></p>
+	-->
+	
+  </body>
+</html>
