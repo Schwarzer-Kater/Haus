@@ -174,7 +174,7 @@ createDataBase()
 asyncio.run(greeting("Beginn Datensammlung"))
 
 while True:
-    time.sleep(1 * 60)
+    time.sleep(5 * 60)
     zeit = time.time()
     print("Zeit:", time.ctime(zeit), " == ", int(zeit))
     print("Temperatur aussen: ", temperaturAussen)
