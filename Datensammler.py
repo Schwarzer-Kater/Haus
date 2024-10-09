@@ -69,8 +69,12 @@ def createDataBase():
 
 async def greeting(txt):
     bot = telegram.Bot("6672672618:AAGHCSR-hKABWGuZa5Mfg7KKOS4ZFpvAYkQ")
-    async with bot:
-        await bot.send_message(text = txt, chat_id = 6545971354)
+    try:
+        async with bot:
+            await bot.send_message(text = txt, chat_id = 6545971354)
+    except (TimeoutError, asyncio.exceptions.CancelledError, telegram.error.TimedOut):
+        print("Timeout Error, cannot send message to Telegram!")
+        
 
 
 def statusMeldung(sensor, wertJetzt, statusVorher, zeit):

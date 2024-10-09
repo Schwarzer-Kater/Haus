@@ -26,7 +26,7 @@
   <body>
 	<h1> Inhalt</h1>
 	<table>
-	  <caption> Messwerte</caption>
+	  <caption> Alle Messwerte</caption>
 	  <thead>
 		<tr><th>ID</th><th>Zeit</th><th>Temp. aussen</th><th>Luftfeuchte aussen</th><th>Luftdruck</th>
 		  <th>Lichtwert</th><th>Temp. innen</th><th>Luftfeuchte innen</th><th>Temp. Garage</th></tr>
@@ -73,6 +73,5 @@
 	
 	
 	?>
-	2 Bla Bla
 </body>
 </html>
