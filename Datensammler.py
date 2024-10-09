@@ -3,6 +3,7 @@ import time
 import sqlite3
 import asyncio
 import telegram
+from telegram.ext import Updater, CommandHandler
 
 temperaturAussen = None
 luftfeuchtigkeitAussen = None
@@ -136,7 +137,7 @@ def on_message(client, userdata, message):
             """, (int(zeit), ("offen" if garagentorOffen else "geschlossen")))
             db2.commit()
             db2.close()
-            asyncio.run(greeting("Datensammler - Garagentor " + ("offen" if garagentorOffen else "geschlossen")))
+            # asyncio.run(greeting("Datensammler - Garagentor " + ("offen" if garagentorOffen else "geschlossen")))
     if message.topic == "/Garage/in/bwrest":
         kreis = msgReceived.split("/")
         db2 = sqlite3.connect("wetter.db")
@@ -163,6 +164,7 @@ def on_connect(client, userdata, flags, rc):
     elif rc == 5:
         print("MQTT connection refused - not authorised")    
 
+
 client = mqtt.Client("DatenSammler")
 client.on_message = on_message
 client.on_connect = on_connect
@@ -171,7 +173,8 @@ client.loop_start()
 client.subscribe("/ArbeitszimmerK/+/+/Ausgelesen")
 client.subscribe("/Garage/in/+")
 createDataBase()
-asyncio.run(greeting("Beginn Datensammlung"))
+asyncio.run(greeting("Beginn Datensammlung v1.1 2024-09-03"))
+
 
 while True:
     time.sleep(5 * 60)
